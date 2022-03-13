@@ -14,8 +14,22 @@ object finalProj {
       val conf = new SparkConf().setAppName("finalProj")
                                     // .setMaster("local[4]")
       val sc = new SparkContext(conf)
-      val lines = sc.textFile("/user/etruon08/input/animes.csv")
-      val intLines = lines.map(line => (line.split(",")(0), line.split(",")(1)))
-      .top(10).foreach(println)
+      // read in animes file (animesParsed.csv)
+      val animeLines = sc.textFile("/user/etruon08/input/animesParsedSmall.csv")
+      // read in noiseWords file (noiseWords.csv)
+      val noiseWords = sc.textFile("user/etruon08/input/noiseWords.csv").flatMap(line => line.trim())
+
+      // index 1 = title
+      // index 2 = description
+      // index 3 = score
+
+      val descWords = animeLines.flatMap(line => line.split(",")(2).trim().split(" ").trim())
+      // remove noise words
+      val cleanDescWords = descWords.subtract(noiseWords)
+      val wordTuples = cleanDescWords.map(word => (word, 1))
+      val wordCount = wordTuples.reduceByKey({ (x,y) => x + y }).sortByKey()
+
+      // don't know if we should do this way or the treeMap method
+      // if we continue down this path, you would just take the .top(N) of wordCount which are tuples => (word, wordCount)
    }
 }
