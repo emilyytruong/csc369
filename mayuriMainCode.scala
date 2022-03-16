@@ -53,7 +53,7 @@ object App {
     //vectors = RDD of Arrays, where each array is a show: [count of "world", count of "secondWord", ...]
     //docCounts = Array [doc count of "world", doc count of "secondWord", ...] VERY SLOW TO GENERATE
 
-    val scaledVectors = vectors.map(show => if (show.max != 0) {show.indices.map(i => (show(i) / show.max) * (log10(16000 / docCounts(i)) / log10(2.0)))} else {show.toVector})
+    val scaledVectors = vectors.map(show => if (show.max != 0) {show.indices.map(i => (show(i) / show.max) * (log10(19311 / docCounts(i)) / log10(2.0)))} else {show.toVector})
     //RDD of Vectors, where each vector has the scaled value for the word: [scaled val of "world, scaled val of "secondWord", etc]
 
     // *** Next steps: ***
